@@ -10,7 +10,7 @@ int main()
 	int n = 10;
 
 	std::future<int> listingA = std::async(std::launch::async,
-        [n] {
+        [] (int n) {
 		int sum = 0;
 		for (int i = 0; i < n; ++i)
 		{
@@ -20,7 +20,7 @@ int main()
 		}
 
 		return sum;
-	});
+	}, n);
 
 	// std::future_status s = listingA.wait_for(std::chrono::seconds(5));
 	// if (s == std::future_status::ready)
