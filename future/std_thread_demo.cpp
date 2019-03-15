@@ -17,7 +17,7 @@ int main()
             printf("List A (%d):\t%d\n", i, sum);
             this_thread::sleep_for(chrono::seconds(1));
         }
-    }, n, std::ref(sum1));
+    }, n, std::ref(sum1));//更灵活的参数传递方式，但仍然需要通过引用参数的方式获得线程计算结果
 
     int sum2 = 0;
     thread listingB([] (int n, int& sum) -> void{
@@ -33,7 +33,7 @@ int main()
         }
     }, n, std::ref(sum2));
 
-    listingA.join();
+    listingA.join();//仍然不能设置等待超时
     listingB.join();
 
     printf("Listing A return %d\n", sum1);
