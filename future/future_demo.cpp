@@ -10,7 +10,7 @@ int main()
 	int n = 10;
 
 	std::future<int> listingA = std::async(std::launch::async,
-        [] (int n) {
+        [] (int n) {//参数传递
 		int sum = 0;
 		for (int i = 0; i < n; ++i)
 		{
@@ -22,7 +22,7 @@ int main()
 		return sum;
 	}, n);
 
-	// std::future_status s = listingA.wait_for(std::chrono::seconds(5));
+	// std::future_status s = listingA.wait_for(std::chrono::seconds(5));//std::future.wait_for()可以设置超时等待，并获知等待是否超时
 	// if (s == std::future_status::ready)
 	// {
 	// 	printf("Listing A return %d\n", listingA.get());
@@ -37,7 +37,7 @@ int main()
     // }
 
 	std::future<int> listingB = std::async(std::launch::async,
-        [n] {
+        [n] {//闭包传递
 
 		int sum = 0;
 		int j = 1;
@@ -52,7 +52,7 @@ int main()
 		return sum;
 	});
 
-	printf("Listing A return %d\n", listingA.get());
+	printf("Listing A return %d\n", listingA.get());//std::future.get()有等待线程完成并获取返回值的双重作用
 	printf("Listing B return %d\n", listingB.get());
 
     return 0;
