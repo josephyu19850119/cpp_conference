@@ -22,19 +22,19 @@ int main()
 		return sum;
 	});
 
-	std::future_status s = listingA.wait_for(std::chrono::seconds(5));
-	if (s == std::future_status::ready)
-	{
-		printf("Listing A return %d\n", listingA.get());
-	}
-	else if (s == std::future_status::timeout)
-	{
-		printf("Listing A time out!\n");
-	}
-    else if (s == std::future_status::deferred)
-    {
-		printf("Listing A is deferred!\n");
-    }
+	// std::future_status s = listingA.wait_for(std::chrono::seconds(5));
+	// if (s == std::future_status::ready)
+	// {
+	// 	printf("Listing A return %d\n", listingA.get());
+	// }
+	// else if (s == std::future_status::timeout)
+	// {
+	// 	printf("Listing A time out!\n");
+	// }
+    // else if (s == std::future_status::deferred)
+    // {
+	// 	printf("Listing A is deferred!\n");
+    // }
 
 	std::future<int> listingB = std::async(std::launch::async,
         [n] {
@@ -52,7 +52,7 @@ int main()
 		return sum;
 	});
 
-	// printf("Listing A return %d\n", listingA.get());
+	printf("Listing A return %d\n", listingA.get());
 	printf("Listing B return %d\n", listingB.get());
 
     return 0;
