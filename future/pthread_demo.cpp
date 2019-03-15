@@ -5,7 +5,7 @@
 struct thread_params
 {
     int n;
-    int result;
+    int result;//不能通过返回值的方式获得线程计算结果
 };
 
 void* listingA(void* p)
@@ -38,7 +38,7 @@ void* listingB(void* p)
 
 int main()
 {
-    thread_params listingA_params, listingB_params;
+    thread_params listingA_params, listingB_params;//传多个参数方式不灵活，需要打包在一个结构体中传递
     listingA_params.n = 10;
     listingB_params.n = 10;
 
@@ -48,7 +48,7 @@ int main()
     pthread_t thread_id2;
     pthread_create(&thread_id2, nullptr, listingB, &listingB_params);
 
-    pthread_join(thread_id1, nullptr);
+    pthread_join(thread_id1, nullptr);//不能设置等待超时
     pthread_join(thread_id2, nullptr);
 
     printf("Listing A return %d\n", listingA_params.result);
