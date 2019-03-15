@@ -2,31 +2,35 @@
 #include<unistd.h>
 #include<cstdio>
 
-int ret1;
+struct thread_params
+{
+    int n;
+    int result;
+};
+
 void* listingA(void* p)
 {
-    int n = *static_cast<int*>(p);
-    ret1 = 0;
-    for (int i = 0; i < n; ++i)
+    thread_params* params = static_cast<thread_params*>(p);
+    params->result = 0;
+    for (int i = 0; i < params->n; ++i)
     {
-        ret1 += i;
-        printf("List A (%d):\t%d\n", i, ret1);
+        params->result += i;
+        printf("List A (%d):\t%d\n", i, params->result);
         sleep(1);
     }
     return nullptr;
 }
 
-int ret2;
 void* listingB(void* p)
 {
-    int n = *static_cast<int*>(p);
-    ret2 = 0;
+    thread_params* params = static_cast<thread_params*>(p);
+    params->result = 0;
     int m = 1;
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < params->n; ++i)
     {
-        ret2 += m;
+        params->result += m;
         m *= 2;
-        printf("List B (%d):\t%d\n", i, ret2);
+        printf("List B (%d):\t%d\n", i, params->result);
         sleep(1);
     }
     return nullptr;
@@ -34,18 +38,20 @@ void* listingB(void* p)
 
 int main()
 {
-    int n = 10;
+    thread_params listingA_params, listingB_params;
+    listingA_params.n = 10;
+    listingB_params.n = 10;
 
     pthread_t thread_id1;
-    pthread_create(&thread_id1, nullptr, listingA, &n);
+    pthread_create(&thread_id1, nullptr, listingA, &listingA_params);
 
     pthread_t thread_id2;
-    pthread_create(&thread_id2, nullptr, listingB, &n);
+    pthread_create(&thread_id2, nullptr, listingB, &listingB_params);
 
     pthread_join(thread_id1, nullptr);
     pthread_join(thread_id2, nullptr);
 
-    printf("Listing A return %d\n", ret1);
-    printf("Listing B return %d\n", ret2);
+    printf("Listing A return %d\n", listingA_params.result);
+    printf("Listing B return %d\n", listingB_params.result);
     return 0;
 }
