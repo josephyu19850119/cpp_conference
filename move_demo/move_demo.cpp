@@ -125,24 +125,18 @@ void PrintMyClass(const MyClass& mc)
 int main()
 {
 	// MyClass ms = MyFunc();
-
-	// MyClass ms;
 	// MyFunc(ms);
 
-	// PrintMyClass(ms);
+	MyClass leftVal(666), testVal;
 
-	MyClass mc1, mc2;
-	MyClass testVal;
+	PrintMyClass(leftVal);
+	PrintMyClass(testVal);
 
-	// testVal = mc1 + mc2;
-	testVal = MyFunc();
-
-	// MyClass leftVal(666);
-	// // testVal = leftVal;
+	testVal = leftVal;
 	// testVal = move(leftVal);
 
-	// PrintMyClass(leftVal);
-	// PrintMyClass(testVal);
+	PrintMyClass(leftVal);
+	PrintMyClass(testVal);
 
 	return 0;
 }
