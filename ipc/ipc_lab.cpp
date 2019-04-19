@@ -52,9 +52,9 @@ void print_string_2_double(T string_2_double)
 int main()
 {
 	boost::interprocess::shared_memory_object::remove("Boost");
-	boost::interprocess::managed_shared_memory managed_shm{ boost::interprocess::open_or_create, "Boost", 1024 };
+	boost::interprocess::managed_shared_memory managed_shm{ boost::interprocess::open_or_create, "Boost", 4096 };
 
-	ipc_string_2_strings* str2strs = managed_shm.find_or_construct<ipc_string_2_strings>("str2strs")(managed_shm.get_segment_manager());
+	ipc_string_2_strings* str2strs = managed_shm.find_or_construct<ipc_string_2_strings>("str2strs")(std::less<ipc_string>(), managed_shm.get_segment_manager());
 
 	str2strs->find(ipc_string("guys", managed_shm.get_segment_manager()));
 
@@ -80,7 +80,7 @@ int main()
 	print_str2strs(str2strs);
 
 
-	ipc_string_2_double* str2double = managed_shm.find_or_construct<ipc_string_2_double>("str2double")(managed_shm.get_segment_manager());
+	ipc_string_2_double* str2double = managed_shm.find_or_construct<ipc_string_2_double>("str2double")(std::less<ipc_string>(), managed_shm.get_segment_manager());
 
 	(*str2double)[ipc_string("pi", managed_shm.get_segment_manager())] = 3.14;
 	(*str2double)[ipc_string("e", managed_shm.get_segment_manager())] = 2.6;
