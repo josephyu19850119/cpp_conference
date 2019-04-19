@@ -9,6 +9,21 @@
 
 using namespace boost::interprocess;
 
+typedef boost::interprocess::allocator<char, boost::interprocess::managed_shared_memory::segment_manager> ipc_string_mgr;
+typedef boost::interprocess::basic_string<char, std::char_traits<char>, ipc_string_mgr> ipc_string;
+
+typedef boost::interprocess::allocator<ipc_string, boost::interprocess::managed_shared_memory::segment_manager> ipc_vector_string_mgr;
+typedef boost::interprocess::vector<ipc_string, ipc_vector_string_mgr> ipc_vector_string;
+
+typedef boost::interprocess::allocator<std::pair<const ipc_string, int>, boost::interprocess::managed_shared_memory::segment_manager> ipc_string2int_mgr;
+typedef boost::interprocess::map<ipc_string, int, std::less<ipc_string>, ipc_string2int_mgr> ipc_string2int;
+
+typedef boost::interprocess::allocator<std::pair<const ipc_string, ipc_vector_string>, boost::interprocess::managed_shared_memory::segment_manager> ipc_string_2_strings_mgr;
+typedef boost::interprocess::map<ipc_string, ipc_vector_string, std::less<ipc_string>, ipc_string_2_strings_mgr> ipc_string_2_strings;
+
+typedef boost::interprocess::allocator<std::pair<const ipc_string, double>, boost::interprocess::managed_shared_memory::segment_manager> ipc_string_2_double_mgr;
+typedef boost::interprocess::map<ipc_string, double, std::less<ipc_string>, ipc_string_2_double_mgr> ipc_string_2_double;
+
 template<typename T>
 void print_str2strs(T str2strs)
 {
@@ -38,21 +53,6 @@ int main()
 {
 	boost::interprocess::shared_memory_object::remove("Boost");
 	boost::interprocess::managed_shared_memory managed_shm{ boost::interprocess::open_or_create, "Boost", 1024 };
-
-	typedef boost::interprocess::allocator<char, boost::interprocess::managed_shared_memory::segment_manager> ipc_string_mgr;
-	typedef boost::interprocess::basic_string<char, std::char_traits<char>, ipc_string_mgr> ipc_string;
-
-	typedef boost::interprocess::allocator<ipc_string, boost::interprocess::managed_shared_memory::segment_manager> ipc_vector_string_mgr;
-	typedef boost::interprocess::vector<ipc_string, ipc_vector_string_mgr> ipc_vector_string;
-
-	typedef boost::interprocess::allocator<std::pair<const ipc_string, int>, boost::interprocess::managed_shared_memory::segment_manager> ipc_string2int_mgr;
-	typedef boost::interprocess::map<ipc_string, int, std::less<ipc_string>, ipc_string2int_mgr> ipc_string2int;
-
-	typedef boost::interprocess::allocator<std::pair<const ipc_string, ipc_vector_string>, boost::interprocess::managed_shared_memory::segment_manager> ipc_string_2_strings_mgr;
-	typedef boost::interprocess::map<ipc_string, ipc_vector_string, std::less<ipc_string>, ipc_string_2_strings_mgr> ipc_string_2_strings;
-
-	typedef boost::interprocess::allocator<std::pair<const ipc_string, double>, boost::interprocess::managed_shared_memory::segment_manager> ipc_string_2_double_mgr;
-	typedef boost::interprocess::map<ipc_string, double, std::less<ipc_string>, ipc_string_2_double_mgr> ipc_string_2_double;
 
 	ipc_string_2_strings* str2strs = managed_shm.find_or_construct<ipc_string_2_strings>("str2strs")(managed_shm.get_segment_manager());
 
