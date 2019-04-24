@@ -6,6 +6,7 @@
 #include <boost/interprocess/containers/string.hpp>
 #include <boost/interprocess/containers/vector.hpp>
 #include <boost/interprocess/allocators/allocator.hpp>
+#include <boost/algorithm/string.hpp>
 
 typedef boost::interprocess::allocator<char, boost::interprocess::managed_shared_memory::segment_manager> ipc_string_mgr;
 typedef boost::interprocess::basic_string<char, std::char_traits<char>, ipc_string_mgr> ipc_string;
@@ -31,7 +32,12 @@ int main()
 	std::string str;
 	while (std::getline(std::cin, str))
 	{
-		if (str == "q")
+		boost::trim(str);
+		if (str.empty())
+		{
+			continue;
+		}
+		else if (str == "q")
 		{
 			break;
 		}
