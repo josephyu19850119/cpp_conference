@@ -73,6 +73,7 @@ void signal_handler(int signum)
 	case SIGINT:  //确保被ctrl-c时，走进程正常退出流程，确保调用各个对象析构函数清理相应资源，且不生成dump core
 	case SIGTSTP: //确保被ctrl-z时，走进程正常退出流程，确保调用各个对象析构函数清理相应资源，且不生成dump core
 		std::exit(0);
+	case SIGQUIT: //确保被用类似"kill -3"这样的方法终止进程并生成core时，调用相应资源清理函数
 	case SIGSEGV: //确保非法地址访问导致进程终止时，手动调用资源清理函数，且生成dump core
 	case SIGFPE:  //确保被零除导致进程终止时，手动调用资源清理函数，且生成dump core
 		std::terminate();
@@ -105,6 +106,13 @@ int main(int argc, char **argv)
 	if (signal(SIGTSTP, signal_handler) == SIG_ERR)
 	{
 		printf("Set SIGTSTP handler failed");
+		return 1;
+	};
+
+    //确保被用类似"kill -3"这样的方法终止进程并生成core时，调用相应资源清理函数
+	if (signal(SIGQUIT, signal_handler) == SIG_ERR)
+	{
+		printf("Set SIGQUIT handler failed");
 		return 1;
 	};
 
