@@ -28,6 +28,15 @@ int main()
 {
 	boost::interprocess::managed_shared_memory managed_shm{ boost::interprocess::open_or_create, "ipc_demo", 4096 };
 	ipc_vector_string* strs = managed_shm.find_or_construct<ipc_vector_string>("strs")(managed_shm.get_segment_manager());
+	/*
+	对于上面的ipc_vector_string类型对象，如何(如果可能)让它以普通的内存管理方式，也就是不再boost::interprocess::managed_shared_memory
+	的管理下分配内存，形如:
+	ipc_vector_string strs;
+	当然，上面这行代码是无法编译的，VC++会提示错误:
+	C2512	“boost::interprocess::allocator<ipc_string,boost::interprocess::segment_manager<CharType,MemoryAlgorithm,IndexType>>::allocator”: 没有合适的默认构造函数可用
+	那么应该传怎样一个参数呢？
+	抑或在第12，15行定义的类型，已经无法像通常的方式(非进程间共享)分配和管理内存？
+	*/
 
 	std::string str;
 	while (std::getline(std::cin, str))
